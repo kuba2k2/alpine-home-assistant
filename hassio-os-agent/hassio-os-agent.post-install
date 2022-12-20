@@ -1,5 +1,5 @@
 #!/bin/sh
 
 service dbus restart
-service haos-agent start
-rc-update add haos-agent
+service hassio-os-agent start
+rc-update add hassio-os-agent

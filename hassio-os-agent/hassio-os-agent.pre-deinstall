@@ -1,4 +1,4 @@
 #!/bin/sh
 
-service haos-agent stop
-rc-update del -qq haos-agent
+service hassio-os-agent stop
+rc-update del -qq hassio-os-agent

@@ -16,7 +16,7 @@ source="
 	${pkgname}.initd
 	*.conf
 	"
-builddir="${srcdir}"
+builddir="${srcdir}/dbusrc-${pkgver}"
 options="!check"
 
 build() {

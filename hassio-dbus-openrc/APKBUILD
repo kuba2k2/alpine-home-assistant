@@ -19,18 +19,12 @@ source="
 builddir="${srcdir}"
 options="!check"
 
-prepare() {
-	default_prepare()
-	mkdir -p "${srcdir}"
-	cp -R "${startdir}/py-pkg/" "${srcdir}/"
-}
-
 build() {
 	mkdir -p "${pkgdir}"
 }
 
 package() {
-	python3 -m pip install --prefix=/usr --root="${pkgdir}" --ignore-installed --no-deps "${srcdir}/py-pkg/"
+	python3 -m pip install --prefix=/usr --root="${pkgdir}" --ignore-installed --no-deps "${startdir}/py-pkg/"
 
 	install -m644 -D "${srcdir}/org.freedesktop.hostname1.conf" \
 		"${pkgdir}/usr/share/dbus-1/system.d/org.freedesktop.hostname1.conf"

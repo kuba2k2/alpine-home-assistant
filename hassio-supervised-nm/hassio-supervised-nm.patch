@@ -1,0 +1,18 @@
+--- a/etc/NetworkManager/NetworkManager.conf
++++ b/etc/NetworkManager/NetworkManager.conf
+@@ -8,7 +8,7 @@
+ unmanaged-devices=type:bridge;type:tun;driver:veth
+ 
+ [logging]
+-backend=journal
++backend=syslog
+ 
+ [connection]
+ connection.mdns=2
+--- a/etc/network/interfaces
++++ b/etc/network/interfaces
+@@ -1,4 +1,2 @@
+-source /etc/network/interfaces.d/*
+-
+ auto lo
+ iface lo inet loopback

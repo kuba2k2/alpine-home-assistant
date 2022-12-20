@@ -1,0 +1,49 @@
+# Contributor:
+# Maintainer:
+pkgname=hassio-supervised
+pkgver=1.4.1
+pkgrel=0
+pkgdesc="Home Assistant Supervised"
+url="https://github.com/home-assistant/supervised-installer"
+arch="noarch"
+license="Apache-2.0"
+depends="jq wget curl docker apparmor hassio-os-agent"
+makedepends=""
+checkdepends=""
+install="${pkgname}.pre-install ${pkgname}.post-install ${pkgname}.pre-deinstall ${pkgname}.post-deinstall"
+subpackages=""
+source="
+	${pkgname}-${pkgver}.tar.gz::https://github.com/home-assistant/supervised-installer/archive/refs/tags/${pkgver}.tar.gz
+	hassio-apparmor.initd
+	hassio-supervisor.initd
+	${pkgname}.patch
+	"
+builddir="${srcdir}/supervised-installer-${pkgver}/homeassistant-supervised"
+options="!check"
+
+build() {
+	mkdir -p "${pkgdir}"
+}
+
+package() {
+	install -m644 -D "${builddir}/etc/docker/daemon.json" \
+		"${pkgdir}/etc/docker/daemon.json"
+	install -m755 -D "${builddir}/usr/bin/ha" \
+		"${pkgdir}/usr/bin/ha"
+	install -m755 -D "${builddir}/usr/sbin/hassio-apparmor" \
+		"${pkgdir}/usr/sbin/hassio-apparmor"
+	install -m755 -D "${builddir}/usr/sbin/hassio-supervisor" \
+		"${pkgdir}/usr/sbin/hassio-supervisor"
+
+	install -m755 -D "${srcdir}/hassio-apparmor.initd" \
+		"${pkgdir}/etc/init.d/hassio-apparmor"
+	install -m755 -D "${srcdir}/hassio-supervisor.initd" \
+                "${pkgdir}/etc/init.d/hassio-supervisor"
+}
+
+sha512sums="
+de9a4c51097ebce911392d0626572209ecb66275d689fefa49044cc45da3acdb5ccdb55b159965abdd748b7711ca265abae19b370bb2fa10a241cfa1b5dbd2aa  hassio-supervised-1.4.1.tar.gz
+d9a92936f19acfa5360af61ecf58f190acf98e7476b4655578546d9a1c12349113d688295668762009fe7baafd2f9a1b52b0ad1a297fa4ff8ba42ec9ebc1ef54  hassio-apparmor.initd
+d465023cabb7b11ba5338df90ff0ac1a3ecff0c4b95c857107b81561f563f5d45829a9cf2d706ed6b4ff06af3067393befd267899d5515934a8a3c3698086aac  hassio-supervisor.initd
+bb6cb1e8849f5351b08dd8df375e68245df6b12b688207842009eda2d8ec7864e895eca1b4e48475dc2f1c27546291f6c539dc6a1fbbc41f9026b9f8c47d37c8  hassio-supervised.patch
+"

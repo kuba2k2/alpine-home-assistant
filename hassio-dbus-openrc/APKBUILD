@@ -1,0 +1,51 @@
+# Contributor:
+# Maintainer:
+pkgname=hassio-dbus-openrc
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="DBus bindings to OpenRC for Home Assistant"
+url="https://github.com/home-assistant/supervisor/tree/main/supervisor/dbus"
+arch="noarch"
+license="MIT"
+depends="python3 py3-pydbus dbus"
+makedepends="poetry py3-pip"
+checkdepends=""
+install="${pkgname}.post-install ${pkgname}.pre-deinstall"
+subpackages=""
+source="
+	${pkgname}.initd
+	*.conf
+	"
+builddir="${srcdir}"
+options="!check"
+
+prepare() {
+	default_prepare()
+	mkdir -p "${srcdir}"
+	cp -R "${startdir}/py-pkg/" "${srcdir}/"
+}
+
+build() {
+	mkdir -p "${pkgdir}"
+}
+
+package() {
+	python3 -m pip install --prefix=/usr --root="${pkgdir}" --ignore-installed --no-deps "${srcdir}/py-pkg/"
+
+	install -m644 -D "${srcdir}/org.freedesktop.hostname1.conf" \
+		"${pkgdir}/usr/share/dbus-1/system.d/org.freedesktop.hostname1.conf"
+	install -m644 -D "${srcdir}/org.freedesktop.systemd1.conf" \
+                "${pkgdir}/usr/share/dbus-1/system.d/org.freedesktop.systemd1.conf"
+	install -m644 -D "${srcdir}/org.freedesktop.timedate1.conf" \
+                "${pkgdir}/usr/share/dbus-1/system.d/org.freedesktop.timedate1.conf"
+
+	install -m755 -D "${srcdir}/${pkgname}.initd" \
+		"${pkgdir}/etc/init.d/${pkgname}"
+}
+
+sha512sums="
+90f9f464d04162c6b883a825c8497acef0d2377afd529b2cfbf97eb753efcf955c1fdb38d7d56c307794d6c22aaf55f81cea3c7a4b2b3abaa147c97f798f092b  hassio-dbus-openrc.initd
+d36ce017b4d809e08d3f442cefc49b80b61aa5bc54066b3c0695adfe1668b6123b00a029a118c89b75f2d51a7e16be5318ac0933d647b3206cc672eab5e513f1  org.freedesktop.hostname1.conf
+082fc88ffdc4f183edd5ed4d5080924a83a8223ad39bf24eebd731c72a9e50ab6d92a2657005c300055244a8555691543ed7dfd5c520e6ddb06ac3b9a05a8a9e  org.freedesktop.systemd1.conf
+60ab82abf1c50aef15d019c136ca76c9e23f48ed33969ad3ff32c12d0838843244b2c1b1581140ec0406a1ec5ad3202ad08731ea32fa8087a1b7d7cb49001bdd  org.freedesktop.timedate1.conf
+"

@@ -1,0 +1,13 @@
+#!/sbin/openrc-run
+
+name="Hass.io AppArmor"
+
+depend() {
+	before docker hassio-supervisor
+}
+
+start() {
+	ebegin "Starting $name"
+	hassio-apparmor
+	eend $?
+}

@@ -1,0 +1,7 @@
+--- a/etc/docker/daemon.json
++++ b/etc/docker/daemon.json
+@@ -1,4 +1,3 @@
+ {
+-    "log-driver": "journald",
+     "storage-driver": "overlay2"
+ }

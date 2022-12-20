@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+function info { echo -e "\e[32m[info] $*\e[39m"; }
+function warn  { echo -e "\e[33m[warn] $*\e[39m"; }
+function error { echo -e "\e[31m[error] $*\e[39m"; exit 1; }
+
+warn ""
+warn "If you want more control over your own system, run"
+warn "Home Assistant as a VM or run Home Assistant Core"
+warn "via a Docker container."
+warn ""
+
+# Check dmesg access
+if [[ "$(sysctl -n kernel.dmesg_restrict)" != "0" ]]; then
+	info "Fix kernel dmesg restriction"
+	echo 0 > /proc/sys/kernel/dmesg_restrict
+	echo "kernel.dmesg_restrict=0" >> /etc/sysctl.conf
+fi
+
+mv /etc/docker/daemon.json /etc/docker/daemon.json.hassio-old > /dev/null 2>&1 || true

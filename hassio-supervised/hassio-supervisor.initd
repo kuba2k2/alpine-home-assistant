@@ -1,0 +1,22 @@
+#!/sbin/openrc-run
+
+name="Hass.io Supervisor"
+command="hassio-supervisor"
+supervisor="supervise-daemon"
+
+depend() {
+	need docker dbus
+	want net hassio-apparmor haos-agent
+	after docker dbus net hassio-apparmor haos-agent
+}
+
+start_pre() {
+	docker stop hassio_supervisor >/dev/null 2>&1 || true
+}
+
+stop() {
+	ebegin "Stopping $name"
+	docker stop hassio_supervisor >/dev/null 2>&1 || true
+	supervise-daemon hassio-supervisor --stop hassio-supervisor
+	eend $?
+}

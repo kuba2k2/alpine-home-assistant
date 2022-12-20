@@ -1,0 +1,36 @@
+# Contributor:
+# Maintainer:
+pkgname=hassio-supervised-nm
+pkgver=1.4.1
+pkgrel=0
+pkgdesc="Home Assistant Supervised (NetworkManager support)"
+url="https://github.com/home-assistant/supervised-installer"
+arch="noarch"
+license="Apache-2.0"
+depends="networkmanager"
+makedepends=""
+checkdepends=""
+install="${pkgname}.pre-install ${pkgname}.post-install ${pkgname}.post-deinstall"
+subpackages=""
+source="
+	${pkgname}-${pkgver}.tar.gz::https://github.com/home-assistant/supervised-installer/archive/refs/tags/${pkgver}.tar.gz
+	${pkgname}.patch
+	"
+builddir="${srcdir}/supervised-installer-${pkgver}/homeassistant-supervised"
+options="!check"
+
+build() {
+	mkdir -p "${pkgdir}"
+}
+
+package() {
+	install -m644 -D "${builddir}/etc/network/interfaces" \
+		"${pkgdir}/etc/network/interfaces"
+	install -m644 -D "${builddir}/etc/NetworkManager/NetworkManager.conf" \
+		"${pkgdir}/etc/NetworkManager/conf.d/hassio-supervised.conf"
+}
+
+sha512sums="
+de9a4c51097ebce911392d0626572209ecb66275d689fefa49044cc45da3acdb5ccdb55b159965abdd748b7711ca265abae19b370bb2fa10a241cfa1b5dbd2aa  hassio-supervised-nm-1.4.1.tar.gz
+3335f753b919163b2f1b67e85969218cc2508a977f9c650a6f348dac3be4e2fe9af34c771f53c98152cf4254ab005b44b90452c0343147fe44165baf23fa5075  hassio-supervised-nm.patch
+"

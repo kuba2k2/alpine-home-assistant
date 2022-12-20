@@ -1,0 +1,10 @@
+#!/sbin/openrc-run
+
+name="Home Assistant DBus bindings"
+command="python3"
+command_args="-m dbusrc"
+supervisor="supervise-daemon"
+
+depend() {
+        need dbus
+}

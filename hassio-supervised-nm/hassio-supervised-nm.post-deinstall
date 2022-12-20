@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mv /etc/network/interfaces.hassio-old /etc/network/interfaces > /dev/null 2>&1 || true

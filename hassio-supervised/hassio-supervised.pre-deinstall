@@ -1,0 +1,6 @@
+#!/bin/sh
+
+service hassio-supervisor stop
+service hassio-apparmor stop
+rc-update del hassio-supervisor
+rc-update del hassio-apparmor

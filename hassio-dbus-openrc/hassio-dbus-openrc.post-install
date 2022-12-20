@@ -1,0 +1,4 @@
+#!/bin/sh
+
+service hassio-dbus-openrc start
+rc-update add hassio-dbus-openrc

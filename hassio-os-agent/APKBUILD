@@ -1,0 +1,39 @@
+# Contributor:
+# Maintainer:
+pkgname=hassio-os-agent
+pkgver=1.4.1
+pkgrel=0
+pkgdesc="Daemon allowing to control OS features through D-Bus"
+url="https://github.com/home-assistant/os-agent"
+arch="all"
+license="Apache-2.0"
+depends="dbus"
+makedepends="go"
+checkdepends=""
+install="${pkgname}.post-install ${pkgname}.pre-deinstall"
+subpackages=""
+source="
+	${pkgname}-${pkgver}.tar.gz::https://github.com/home-assistant/os-agent/archive/refs/tags/${pkgver}.tar.gz
+	${pkgname}.initd
+	"
+builddir="${srcdir}/os-agent-${pkgver}"
+options="!check"
+
+build() {
+	go build -ldflags "-X main.version="
+}
+
+package() {
+	install -m755 -D "${builddir}/os-agent" \
+		"${pkgdir}/usr/bin/os-agent"
+	install -m644 -D "${builddir}/contrib/io.hass.conf" \
+		"${pkgdir}/usr/share/dbus-1/system.d/io.hass.conf"
+
+	install -m755 -D "${srcdir}/${pkgname}.initd" \
+		"${pkgdir}/etc/init.d/haos-agent"
+}
+
+sha512sums="
+4420392d6291cd123d97dd0b93aa94f31bb8845f8e926f2478f919d1f1f6be7d5d812674e0dcef5e017afa32ebc4388d6e3e0e392773dec60efc6e9681c0144c  hassio-os-agent-1.4.1.tar.gz
+ad7267cc660e1dcb36f2996c5f3aa91ffc470d3626124aaa3e89f50a6ea39d97b15b9c251c6d6aee3d8dceb5659d293d53491546facae0c5eae67690dea8944e  hassio-os-agent.initd
+"

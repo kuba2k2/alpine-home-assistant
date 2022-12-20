@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mv /etc/docker/daemon.json.hassio-old /etc/docker/daemon.json > /dev/null 2>&1 || true

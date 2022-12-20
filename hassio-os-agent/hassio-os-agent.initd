@@ -1,0 +1,9 @@
+#!/sbin/openrc-run
+
+name="Home Assistant OS Agent"
+command="/usr/bin/os-agent"
+supervisor="supervise-daemon"
+
+depend() {
+	need dbus
+}

@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "dbusrc"
+version = "0.1.0"
+description = "DBus bindings to OpenRC for Home Assistant"
+authors = ["Kuba Szczodrzyński <kuba@szczodrzynski.pl>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydbus = "^0.6.0"
+
+[tool.poetry.dev-dependencies]
+black = "^22.6.0"
+isort = "^5.10.1"
+autoflake = "^1.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

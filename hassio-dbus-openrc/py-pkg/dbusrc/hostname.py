@@ -1,7 +1,7 @@
 #  Copyright (c) Kuba Szczodrzyński 2022-8-22.
 
 from .interface import InterfaceMixin
-from .utils import cmdstr, getprop, cmd
+from .utils import cmd, cmdstr, getprop
 
 
 class HostnameInterface(InterfaceMixin):

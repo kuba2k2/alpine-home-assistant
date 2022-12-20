@@ -1,7 +1,7 @@
 #  Copyright (c) Kuba Szczodrzyński 2022-8-22.
 
 from .interface import InterfaceMixin
-from .utils import cmd, get_description, dmesg, kstart, slugify
+from .utils import cmd, dmesg, get_description, kstart, slugify
 
 
 class SystemdInterface(InterfaceMixin):

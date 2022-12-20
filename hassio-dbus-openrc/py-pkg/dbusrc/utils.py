@@ -11,9 +11,11 @@ DMESG: list[tuple[float, str]] = []
 
 
 def cmd(*args: str) -> list[str]:
+    print("Running:", *args)
     p = Popen(args, stdout=PIPE, stderr=PIPE)
     p.wait()
     if p.returncode != 0:
+        print("Non-zero return code:", p.returncode)
         raise RuntimeError(p.stderr.read())
     return [line.decode() for line in p.stdout.read().splitlines() if line.strip()]
 
@@ -54,7 +56,9 @@ def get_description(unit: str) -> str:
 
 def dmesg(search: str) -> float:
     if not DMESG:
-        for line in cmd("dmesg"):
+        with open("/var/log/dmesg", "r", encoding="utf-8") as f:
+            lines = f.read().splitlines()
+        for line in lines:
             parts = line[1:].split("] ", maxsplit=2)
             sec = float(parts[0].strip())
             msg = parts[1].strip()

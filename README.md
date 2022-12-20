@@ -76,14 +76,7 @@ Login as a sudo-enabled, non-root user.
 
 ```bash
 cd ~/alpine-home-assistant/
-cd hassio-os-agent/
-abuild -r
-cd ../hassio-supervised/
-abuild -r
-cd ../hassio-supervised-nm/
-abuild -r
-cd ../hassio-dbus-openrc/
-abuild -r
+source build_all.sh
 ```
 
 ### Install

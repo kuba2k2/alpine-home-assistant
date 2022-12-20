@@ -1,4 +1,4 @@
 #!/bin/sh
 
 service hassio-dbus-openrc stop
-rc-update del hassio-dbus-openrc
+rc-update del -qq hassio-dbus-openrc

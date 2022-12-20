@@ -2,5 +2,5 @@
 
 service hassio-supervisor stop
 service hassio-apparmor stop
-rc-update del hassio-supervisor
-rc-update del hassio-apparmor
+rc-update del -qq hassio-supervisor
+rc-update del -qq hassio-apparmor

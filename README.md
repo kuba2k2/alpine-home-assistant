@@ -1,8 +1,6 @@
 # Alpine Linux - Home Assistant Supervised
 
-**Note:** you need a kernel with AppArmor support (AppArmor 2.4 compatibility patch, whatever that means).
-
-## Environment
+## Basic setup
 
 Login as root to configure sudo, if you haven't done this yet.
 
@@ -17,18 +15,25 @@ apk add sudo
 
 Edit `/etc/sudoers` to enable `wheel` group. Add yourself to the group: `addgroup <yourname> wheel`.
 
+Install Docker and Python 3 as well:
+```bash
+apk add docker python3
+```
+
+Add yourself to `docker` group: `addgroup <yourname> docker`.
+
+## Environment
+
 (Re)login as a sudo-enabled, non-root user.
 
 ```bash
-sudo apk add git alpine-sdk docker python3
+sudo apk add git alpine-sdk
 sudo addgroup $(whoami) abuild
 sudo mkdir -p /var/cache/distfiles
 sudo chgrp abuild /var/cache/distfiles
 sudo chmod g+w /var/cache/distfiles
 abuild-keygen -a -i # skip if you already have a key
 ```
-
-Add yourself to `docker` group (`addgroup <yourname> docker`).
 
 Logout and login again.
 
@@ -69,6 +74,10 @@ Optional, but (probably) enables more functionalities in HA, as the supervisor u
 ```bash
 apk add elogind
 ```
+
+### AppArmor
+
+You need a kernel with AppArmor support for best Home Assistant compatibility. Install and enable AppArmor, [as shown in the wiki](https://wiki.alpinelinux.org/wiki/AppArmor). Make sure to also install `apparmor-profiles`.
 
 ## Build packages
 

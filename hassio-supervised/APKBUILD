@@ -1,7 +1,7 @@
 # Contributor:
 # Maintainer:
 pkgname=hassio-supervised
-pkgver=1.4.1
+pkgver=1.5.0
 pkgrel=0
 pkgdesc="Home Assistant Supervised"
 url="https://github.com/home-assistant/supervised-installer"
@@ -42,7 +42,7 @@ package() {
 }
 
 sha512sums="
-de9a4c51097ebce911392d0626572209ecb66275d689fefa49044cc45da3acdb5ccdb55b159965abdd748b7711ca265abae19b370bb2fa10a241cfa1b5dbd2aa  hassio-supervised-1.4.1.tar.gz
+7f4253a7f63c09dfdcce436149ddc14f811c6969f96904fdbd39721b64b27ac5052d596912e0c6dd31d55758aa7d5d142e08305b429160f2c1feea033fff9843  hassio-supervised-1.5.0.tar.gz
 d9a92936f19acfa5360af61ecf58f190acf98e7476b4655578546d9a1c12349113d688295668762009fe7baafd2f9a1b52b0ad1a297fa4ff8ba42ec9ebc1ef54  hassio-apparmor.initd
 d465023cabb7b11ba5338df90ff0ac1a3ecff0c4b95c857107b81561f563f5d45829a9cf2d706ed6b4ff06af3067393befd267899d5515934a8a3c3698086aac  hassio-supervisor.initd
 bb6cb1e8849f5351b08dd8df375e68245df6b12b688207842009eda2d8ec7864e895eca1b4e48475dc2f1c27546291f6c539dc6a1fbbc41f9026b9f8c47d37c8  hassio-supervised.patch

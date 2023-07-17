@@ -1,7 +1,7 @@
 # Contributor:
 # Maintainer:
 pkgname=hassio-supervised-nm
-pkgver=1.4.1
+pkgver=1.5.0
 pkgrel=0
 pkgdesc="Home Assistant Supervised (NetworkManager support)"
 url="https://github.com/home-assistant/supervised-installer"
@@ -31,6 +31,6 @@ package() {
 }
 
 sha512sums="
-de9a4c51097ebce911392d0626572209ecb66275d689fefa49044cc45da3acdb5ccdb55b159965abdd748b7711ca265abae19b370bb2fa10a241cfa1b5dbd2aa  hassio-supervised-nm-1.4.1.tar.gz
+7f4253a7f63c09dfdcce436149ddc14f811c6969f96904fdbd39721b64b27ac5052d596912e0c6dd31d55758aa7d5d142e08305b429160f2c1feea033fff9843  hassio-supervised-nm-1.5.0.tar.gz
 3335f753b919163b2f1b67e85969218cc2508a977f9c650a6f348dac3be4e2fe9af34c771f53c98152cf4254ab005b44b90452c0343147fe44165baf23fa5075  hassio-supervised-nm.patch
 "

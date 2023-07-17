@@ -2,12 +2,12 @@
 # Maintainer:
 pkgname=hassio-supervised
 pkgver=1.5.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Home Assistant Supervised"
 url="https://github.com/home-assistant/supervised-installer"
 arch="noarch"
 license="Apache-2.0"
-depends="jq wget curl docker apparmor hassio-os-agent"
+depends="jq wget curl docker apparmor"
 makedepends=""
 checkdepends=""
 install="${pkgname}.pre-install ${pkgname}.post-install ${pkgname}.pre-deinstall ${pkgname}.post-deinstall"

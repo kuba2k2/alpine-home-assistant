@@ -11,23 +11,27 @@ sed -i '/v3\.\d*\/community/s/^#//' /etc/apk/repositories
 apk update
 # install sudo
 apk add sudo
+# abuild seems to require doas, do this if you don't have it
+ln -s $(which sudo) /usr/bin/doas
+# enable for 'wheel' group
+echo "%wheel ALL=(ALL:ALL) ALL" > /etc/sudoers.d/wheel
+# same without password
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel-nopw
 ```
-
-Edit `/etc/sudoers` to enable `wheel` group. Add yourself to the group: `addgroup <yourname> wheel`.
-
-Install Docker and Python 3 as well:
-```bash
-apk add docker python3
-```
-
-Add yourself to `docker` group: `addgroup <yourname> docker`.
 
 ## Environment
 
 (Re)login as a sudo-enabled, non-root user.
 
 ```bash
-sudo apk add git alpine-sdk
+# install Docker and Python 3
+sudo apk add git docker python3
+# start Docker
+sudo service docker start
+# add yourself to docker group
+sudo addgroup $(whoami) docker
+# install Alpine SDK
+sudo apk add alpine-sdk
 sudo addgroup $(whoami) abuild
 sudo mkdir -p /var/cache/distfiles
 sudo chgrp abuild /var/cache/distfiles
@@ -46,38 +50,23 @@ git clone https://github.com/kuba2k2/alpine-home-assistant
 
 This is optional, but will enable more network-related features in Home Assistant.
 
-Installing NetworkManager on Alpine seems simple, unless you spend many hours trying to fix it, because nobody has ever mentioned that `udev` is required for NM to work at all.
-
-Run **as root**:
-```bash
-apk add eudev networkmanager networkmanager-cli networkmanager-tui
-# errors are normal here
-setup-devd udev
-rc-update del hwdrivers sysinit
-rc-update -a del networking
-rc-update -a del wpa_supplicant
-rc-update add networkmanager boot
-rc-update add udev sysinit
-rc-update add udev-postmount default
-rc-update add udev-settle sysinit
-rc-update add udev-trigger sysinit
-```
-
-Edit `/etc/network/interfaces` and remove all interfaces except `lo`.
-
-Run `nmtui` to configure your network connections (you probably won't be able to activate them yet). Reboot to start NetworkManager and activate the network.
+Refer to [`alpine-custom-setup`](https://github.com/kuba2k2/alpine-custom-setup/blob/master/alpine.md#networkmanager).
 
 ### logind
 
 Optional, but (probably) enables more functionalities in HA, as the supervisor uses logind's DBus.
 
 ```bash
-apk add elogind
+sudo apk add elogind
 ```
 
 ### AppArmor
 
-You need a kernel with AppArmor support for best Home Assistant compatibility. Install and enable AppArmor, [as shown in the wiki](https://wiki.alpinelinux.org/wiki/AppArmor). Make sure to also install `apparmor-profiles`.
+You need a kernel with AppArmor support for best Home Assistant compatibility. Install and enable AppArmor, [as shown in the wiki](https://wiki.alpinelinux.org/wiki/AppArmor). Make sure to also install:
+
+```bash
+sudo apk add apparmor-profiles
+```
 
 ## Build packages
 

@@ -1,0 +1,58 @@
+name: APK build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  abuild:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - x86
+          - x86_64
+          - armhf
+          - armv7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Alpine ${{ matrix.arch }}
+        uses: jirutka/setup-alpine@v1
+        with:
+          arch: ${{ matrix.arch }}
+          branch: latest-stable
+          packages: >
+            alpine-sdk
+          volumes: /mnt/repo:/repo
+
+      - name: Build APK packages
+        shell: alpine.sh {0}
+        env:
+          ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
+          ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
+        run: |
+          source build_all.sh
+          adduser actions -D
+          addgroup actions abuild
+          mkdir -p /var/cache/distfiles
+          chgrp abuild /var/cache/distfiles
+          chmod g+w /var/cache/distfiles
+          chmod +x ./build_all.sh
+          chmod -R a+w .
+          su actions -c "mkdir -p ~/packages/alpine-home-assistant"
+          su actions -c "mkdir -p ~/.abuild/"
+          su actions -c "echo \"$ABUILD_PRIVKEY\" > ~/.abuild/${{ secrets.ABUILD_KEYNAME }}"
+          su actions -c "echo \"$ABUILD_PUBKEY\" > ~/.abuild/${{ secrets.ABUILD_KEYNAME }}.pub"
+          su actions -c "echo PACKAGER_PRIVKEY=\"/home/actions/.abuild/${{ secrets.ABUILD_KEYNAME }}\" > ~/.abuild/abuild.conf"
+          cp /home/actions/.abuild/${{ secrets.ABUILD_KEYNAME }}.pub /etc/apk/keys/${{ secrets.ABUILD_KEYNAME }}.pub
+          su actions -c ./build_all.sh
+          cp -R /home/actions/packages/*/* /repo/
+
+      - name: Deploy APK repo to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: /repo/${{ matrix.arch }}/
+          target-folder: ${{ matrix.arch }}/
+          force: false

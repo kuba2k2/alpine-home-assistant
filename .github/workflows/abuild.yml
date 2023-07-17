@@ -37,7 +37,6 @@ jobs:
           ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
           ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
         run: |
-          source build_all.sh
           adduser actions -D
           addgroup actions abuild
           mkdir -p /var/cache/distfiles

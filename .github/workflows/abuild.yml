@@ -32,7 +32,7 @@ jobs:
           volumes: /home/runner/repo:/repo
 
       - name: Build APK packages
-        shell: alpine.sh {0}
+        shell: alpine.sh --root {0}
         env:
           ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
           ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}

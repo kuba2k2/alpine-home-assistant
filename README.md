@@ -31,6 +31,16 @@ Building from source is also possible; the original guide is also here.
 
 All steps of this guide (unless otherwise noted) are to be ran by a **non-root, sudo-enabled** user.
 
+### Bind propagation
+
+**Important:** since v1.4.3, the Home Assistant Supervisor needs **bind propagation** support in the root filesystem (see [home-assistant/supervised-installer#293](https://github.com/home-assistant/supervised-installer/pull/293)).
+
+The `rshared` flag has to be enabled in `/etc/fstab`:
+
+```
+UUID=the-uuid-is-usually-here       /       ext4    rw,relatime,rshared 0 1
+```
+
 ### Docker
 
 ```bash
@@ -40,20 +50,6 @@ sudo apk add git docker python3
 sudo service docker start
 # add yourself to docker group
 sudo addgroup $(whoami) docker
-```
-
-### NetworkManager
-
-This is optional, but will enable more network-related features in Home Assistant.
-
-Refer to [`alpine-custom-setup`](https://github.com/kuba2k2/alpine-custom-setup/blob/master/alpine.md#networkmanager).
-
-### logind
-
-Optional, but (probably) enables more functionalities in HA, as the supervisor uses logind's DBus.
-
-```bash
-sudo apk add elogind
 ```
 
 ### AppArmor
@@ -71,6 +67,20 @@ lsm=landlock,yama,apparmor
 ```
 
 Refer to [Alpine Wiki/AppArmor](https://wiki.alpinelinux.org/wiki/AppArmor) for details.
+
+### NetworkManager
+
+This is optional, but will enable more network-related features in Home Assistant.
+
+Refer to [`alpine-custom-setup`](https://github.com/kuba2k2/alpine-custom-setup/blob/master/alpine.md#networkmanager).
+
+### logind
+
+Optional, but (probably) enables more functionalities in HA, as the supervisor uses logind's DBus.
+
+```bash
+sudo apk add elogind
+```
 
 ## Installing prebuilt packages
 

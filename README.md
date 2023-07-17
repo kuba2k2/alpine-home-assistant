@@ -29,6 +29,19 @@ Building from source is also possible; the original guide is also here.
 
 ## Prerequisites
 
+All steps of this guide (unless otherwise noted) are to be ran by a **non-root, sudo-enabled** user.
+
+### Docker
+
+```bash
+# install git, Docker and Python 3
+sudo apk add git docker python3
+# start Docker
+sudo service docker start
+# add yourself to docker group
+sudo addgroup $(whoami) docker
+```
+
 ### NetworkManager
 
 This is optional, but will enable more network-related features in Home Assistant.
@@ -89,7 +102,7 @@ watch -n 3 docker ps
 
 ### Basic setup
 
-Login as root to configure sudo, if you haven't done this yet.
+**Login as root** to configure sudo, if you haven't done this yet.
 
 ```bash
 # enable community repository
@@ -111,12 +124,6 @@ echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel-nopw
 (Re)login as a sudo-enabled, non-root user.
 
 ```bash
-# install Docker and Python 3
-sudo apk add git docker python3
-# start Docker
-sudo service docker start
-# add yourself to docker group
-sudo addgroup $(whoami) docker
 # install Alpine SDK
 sudo apk add alpine-sdk
 sudo addgroup $(whoami) abuild

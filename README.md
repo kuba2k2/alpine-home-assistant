@@ -64,6 +64,14 @@ You need a kernel with AppArmor support for best Home Assistant compatibility. I
 sudo apk add apparmor-profiles
 ```
 
+Your kernel command line must have this as well:
+
+```
+lsm=landlock,yama,apparmor
+```
+
+Refer to [Alpine Wiki/AppArmor](https://wiki.alpinelinux.org/wiki/AppArmor) for details.
+
 ## Installing prebuilt packages
 
 Enable the APK repository from this GitHub repo:

@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname=hassio-supervised
 pkgver=1.5.0
-pkgrel=1
+pkgrel=2
 pkgdesc="Home Assistant Supervised"
 url="https://github.com/home-assistant/supervised-installer"
 arch="noarch"
@@ -49,5 +49,5 @@ sha512sums="
 d9a92936f19acfa5360af61ecf58f190acf98e7476b4655578546d9a1c12349113d688295668762009fe7baafd2f9a1b52b0ad1a297fa4ff8ba42ec9ebc1ef54  hassio-apparmor.initd
 d465023cabb7b11ba5338df90ff0ac1a3ecff0c4b95c857107b81561f563f5d45829a9cf2d706ed6b4ff06af3067393befd267899d5515934a8a3c3698086aac  hassio-supervisor.initd
 bb6cb1e8849f5351b08dd8df375e68245df6b12b688207842009eda2d8ec7864e895eca1b4e48475dc2f1c27546291f6c539dc6a1fbbc41f9026b9f8c47d37c8  hassio-supervised.patch
-2c3c6f37d302426d3f4ce639fad08b95384fef2c5a2ffae1061b3057f10d831dab5d60b3531929bf6c7c9fce5f98c9697b944b66989d813cb8d750f5004918bf  daemon.json
+0ea24afe4f315f4f155093355260e8fafdd54e619428f91ca6034d0d10cc5e46e37d11c3531273d5d7ba0ad36fcf74217fbb8b0682658f4bcb116feb84c7de02  daemon.json
 "

@@ -1,7 +1,7 @@
 # Contributor:
 # Maintainer:
 pkgname=hassio-os-agent
-pkgver=1.5.1
+pkgver=1.6.0
 pkgrel=0
 pkgdesc="Daemon allowing to control OS features through D-Bus"
 url="https://github.com/home-assistant/os-agent"
@@ -34,6 +34,6 @@ package() {
 }
 
 sha512sums="
-182ea5e2ed1189f71da2ae481e50f43c8662210293eeaf6ace3968c4eda4210c2cf05476ded1a74850c9c8824c2ce1a9eaebfe5614b779efd32a12bc94b3c7a7  hassio-os-agent-1.5.1.tar.gz
+aeddc62a6e4594b681c590f88f13b4a5f1cf21e4e721785de775f60a13a00875afe18dfefc55f30382672b43035302c3487705ca39c59c0ceb10e6579f82adba  hassio-os-agent-1.6.0.tar.gz
 ad7267cc660e1dcb36f2996c5f3aa91ffc470d3626124aaa3e89f50a6ea39d97b15b9c251c6d6aee3d8dceb5659d293d53491546facae0c5eae67690dea8944e  hassio-os-agent.initd
 "

@@ -25,7 +25,7 @@ FN0IX6Z7106y3qPUktG2f+cCAwEAAQ==
 ```
 </details>
 
-Building from source is also possible; the original guide is also here.
+Building from source is also possible; the original guide is at the end of this document.
 
 ## Prerequisites
 
@@ -118,6 +118,8 @@ watch -n 3 docker ps
 
 ## Building from source
 
+<details>
+
 ### Basic setup
 
 **Login as root** to configure sudo, if you haven't done this yet.
@@ -187,3 +189,5 @@ See Docker containers starting up:
 ```bash
 watch -n 3 docker ps
 ```
+
+</details>

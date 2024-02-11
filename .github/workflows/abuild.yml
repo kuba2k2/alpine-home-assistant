@@ -1,12 +1,14 @@
-name: APK build
-
+name: Manual dispatch
 on:
-  push:
   workflow_dispatch:
-
 jobs:
+  version:
+    name: Get version numbers
+    uses: kuba2k2/kuba2k2/.github/workflows/version.yml@master
+
   abuild:
-    runs-on: ubuntu-latest
+    name: Build Alpine Linux packages
+    uses: kuba2k2/kuba2k2/.github/workflows/abuild.yml@master
     strategy:
       matrix:
         arch:
@@ -14,48 +16,25 @@ jobs:
           - x86_64
           - armhf
           - armv7
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+          - aarch64
+    secrets:
+      ABUILD_KEYNAME: ${{ secrets.ABUILD_KEYNAME }}
+      ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
+      ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
+    with:
+      arch: ${{ matrix.arch }}
+      build: |
+        chmod +x ./build_all.sh
+        ./build_all.sh
 
-      - name: Prepare output directory
-        run: |
-          mkdir /home/runner/repo
-
-      - name: Setup Alpine ${{ matrix.arch }}
-        uses: jirutka/setup-alpine@v1
-        with:
-          arch: ${{ matrix.arch }}
-          branch: latest-stable
-          packages: >
-            alpine-sdk
-          volumes: /home/runner/repo:/repo
-
-      - name: Build APK packages
-        shell: alpine.sh --root {0}
-        env:
-          ABUILD_PRIVKEY: ${{ secrets.ABUILD_PRIVKEY }}
-          ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
-        run: |
-          adduser actions -D
-          addgroup actions abuild
-          mkdir -p /var/cache/distfiles
-          chgrp abuild /var/cache/distfiles
-          chmod g+w /var/cache/distfiles
-          chmod +x ./build_all.sh
-          chmod -R a+w .
-          su actions -c "mkdir -p ~/packages/alpine-home-assistant"
-          su actions -c "mkdir -p ~/.abuild/"
-          su actions -c "echo \"$ABUILD_PRIVKEY\" > ~/.abuild/${{ secrets.ABUILD_KEYNAME }}"
-          su actions -c "echo \"$ABUILD_PUBKEY\" > ~/.abuild/${{ secrets.ABUILD_KEYNAME }}.pub"
-          su actions -c "echo PACKAGER_PRIVKEY=\"/home/actions/.abuild/${{ secrets.ABUILD_KEYNAME }}\" > ~/.abuild/abuild.conf"
-          cp /home/actions/.abuild/${{ secrets.ABUILD_KEYNAME }}.pub /etc/apk/keys/${{ secrets.ABUILD_KEYNAME }}.pub
-          su actions -c ./build_all.sh
-          cp -R /home/actions/packages/*/* /repo/
-
-      - name: Deploy APK repo to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: /home/runner/repo/${{ matrix.arch }}/
-          target-folder: ${{ matrix.arch }}/
-          force: false
+  gh-release:
+    name: Publish GitHub release
+    needs:
+      - version
+      - abuild
+    uses: kuba2k2/kuba2k2/.github/workflows/gh-release.yml@master
+    permissions:
+      contents: write
+    with:
+      artifact: ${{ needs.abuild.outputs.artifact }}
+      name: v${{ needs.version.outputs.git-long }}

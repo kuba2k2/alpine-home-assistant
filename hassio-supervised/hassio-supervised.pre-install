@@ -18,4 +18,23 @@ if [[ "$(sysctl -n kernel.dmesg_restrict)" != "0" ]]; then
 	echo "kernel.dmesg_restrict=0" >> /etc/sysctl.conf
 fi
 
+# If the hassio_supervisor service is running or exists, stop it
+if service hassio-supervisor status > /dev/null; then
+	info "Stopping hassio_supervisor service"
+	service hassio-supervisor stop
+fi
+
+# If the hassio_apparmor service is running or exists, stop it
+if service hassio-apparmor status > /dev/null; then
+	info "Stopping hassio_apparmor service"
+	service hassio-apparmor stop
+fi
+
+# Check for existing hassio_supervisor container and destroy it
+if [[ "$(docker ps -aq -f name=hassio_supervisor)" ]]; then
+	# ensure the hassio_supervisor service is stopped
+	info "Removing existing hassio_supervisor container"
+	docker container rm --force hassio_supervisor > /dev/null
+fi
+
 mv /etc/docker/daemon.json /etc/docker/daemon.json.hassio-old > /dev/null 2>&1 || true

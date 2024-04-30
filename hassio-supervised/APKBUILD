@@ -10,7 +10,7 @@ license="Apache-2.0"
 depends="jq wget curl docker apparmor nfs-utils cifs-utils"
 makedepends=""
 checkdepends=""
-install="${pkgname}.pre-install ${pkgname}.post-install ${pkgname}.pre-deinstall ${pkgname}.post-deinstall"
+install="${pkgname}.pre-install ${pkgname}.post-install ${pkgname}.post-upgrade ${pkgname}.pre-deinstall ${pkgname}.post-deinstall"
 subpackages=""
 source="
 	${pkgname}-${pkgver}.tar.gz::https://github.com/home-assistant/supervised-installer/archive/refs/tags/${pkgver}.tar.gz

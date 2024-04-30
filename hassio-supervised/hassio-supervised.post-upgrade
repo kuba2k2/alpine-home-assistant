@@ -1,0 +1,55 @@
+#!/bin/sh
+
+set -e
+function info { echo -e "\e[32m[info] $*\e[39m"; }
+function warn  { echo -e "\e[33m[warn] $*\e[39m"; }
+function error { echo -e "\e[31m[error] $*\e[39m"; exit 1; }
+
+ARCH=$(uname -m)
+
+DOCKER_REPO="ghcr.io/home-assistant"
+
+case ${ARCH} in
+	"i386" | "i686")
+		MACHINE=${MACHINE:=i386}
+		HASSIO_DOCKER="${DOCKER_REPO}/i386-hassio-supervisor"
+	;;
+	"x86_64")
+		MACHINE=${MACHINE:=amd64}
+		HASSIO_DOCKER="${DOCKER_REPO}/amd64-hassio-supervisor"
+	;;
+	"arm" |"armv6l")
+		MACHINE=${MACHINE:=armhf}
+		HASSIO_DOCKER="${DOCKER_REPO}/armhf-hassio-supervisor"
+	;;
+	"armv7l")
+		MACHINE=${MACHINE:=armv7}
+		HASSIO_DOCKER="${DOCKER_REPO}/armv7-hassio-supervisor"
+	;;
+	"aarch64")
+		MACHINE=${MACHINE:=aarch64}
+		HASSIO_DOCKER="${DOCKER_REPO}/aarch64-hassio-supervisor"
+	;;
+	*)
+		error "${ARCH} unknown!"
+	;;
+esac
+
+PREFIX=${PREFIX:-/usr}
+SYSCONFDIR=${SYSCONFDIR:-/etc}
+DATA_SHARE=${DATA_SHARE:-$PREFIX/share/hassio}
+CONFIG="${SYSCONFDIR}/hassio.json"
+
+cat > "${CONFIG}" <<- EOF
+{
+	"supervisor": "${HASSIO_DOCKER}",
+	"machine": "${MACHINE}",
+	"data": "${DATA_SHARE}"
+}
+EOF
+
+# If the hassio_supervisor service is running, restart it
+if service hassio-supervisor status > /dev/null; then
+	info "Restarting hassio_supervisor service"
+	service hassio-supervisor restart
+fi

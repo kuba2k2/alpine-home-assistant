@@ -24,8 +24,14 @@ jobs:
     with:
       arch: ${{ matrix.arch }}
       build: |
-        chmod +x ./build_all.sh
-        ./build_all.sh
+        cd hassio-os-agent/
+        abuild -r
+        cd ../hassio-supervised/
+        abuild -r
+        cd ../hassio-supervised-nm/
+        abuild -r
+        cd ../hassio-dbus-openrc/
+        abuild -r
 
   gh-release:
     name: Publish GitHub release

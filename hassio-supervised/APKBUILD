@@ -2,7 +2,7 @@
 # Maintainer:
 pkgname=hassio-supervised
 pkgver=1.7.0
-pkgrel=0
+pkgrel=1
 pkgdesc="Home Assistant Supervised"
 url="https://github.com/home-assistant/supervised-installer"
 arch="noarch"

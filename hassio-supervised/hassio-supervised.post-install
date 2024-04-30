@@ -15,9 +15,6 @@ URL_VERSION="https://version.home-assistant.io/stable.json"
 HASSIO_VERSION=$(curl -s ${URL_VERSION} | jq -e -r '.supervisor')
 URL_APPARMOR_PROFILE="https://version.home-assistant.io/apparmor.txt"
 
-# Restart Docker service
-service docker restart
-
 # Check network connection
 while ! ping -c 1 -W 1 ${URL_CHECK_ONLINE} > /dev/null; do
 	info "Waiting for ${URL_CHECK_ONLINE} - network interface might be down..."

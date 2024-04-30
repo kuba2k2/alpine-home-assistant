@@ -2,7 +2,7 @@
 
 This guide, along with a few small software packages, allows to install Home Assistant Supervised on a host machine running Alpine Linux. Note that this is not a supported HA installation method, so YMMV. Personally, it works just fine on my ARMv7 machine.
 
-Since July 2023, there are prebuilt APK packages available in this repo (for `x86`, `x86_64`, `armhf` and `armv7`). The README below has been updated to reflect that. They are signed with the following public key:
+Since July 2023, there are prebuilt APK packages available in this repo (for `x86`, `x86_64`, `armhf`, `armv7` and `aarch64`). The README below has been updated to reflect that. They are signed with the following public key:
 
 <details>
 <summary>Click to show public key</summary>
@@ -26,6 +26,8 @@ FN0IX6Z7106y3qPUktG2f+cCAwEAAQ==
 </details>
 
 Building from source is also possible; the original guide is at the end of this document.
+
+**Note:** in April 2024 the `MACHINE` variable in `/etc/hassio.json` created by this package was changed to reflect the correct system architecture. Upgrading to `hassio-supervised` v1.7.0 or newer will automatically rewrite that file.
 
 ## Prerequisites
 
@@ -109,6 +111,8 @@ sudo apk add hassio-supervised-nm
 # Supervisor & AppArmor - this will install and start Home Assistant
 sudo apk add hassio-supervised
 ```
+
+**Home Assistant will automatically be started** and added as an autostart service in OpenRC.
 
 See Docker containers starting up:
 

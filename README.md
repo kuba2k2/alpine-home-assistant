@@ -27,7 +27,7 @@ FN0IX6Z7106y3qPUktG2f+cCAwEAAQ==
 
 Building from source is also possible; the original guide is at the end of this document.
 
-**Note:** in April 2024 the `MACHINE` variable in `/etc/hassio.json` created by this package was changed to reflect the correct system architecture. Upgrading to `hassio-supervised` v1.7.0 or newer will automatically rewrite that file.
+**Note:** in April 2024 the `MACHINE` variable in `/etc/hassio.json` created by this package was changed to reflect the correct system architecture. Upgrading to `hassio-supervised` v1.7.0 or newer will automatically rewrite that file with every update.
 
 ## Prerequisites
 

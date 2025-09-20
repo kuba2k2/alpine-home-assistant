@@ -23,6 +23,7 @@ UXNr4nUIenfq0fzEYSlPYG3kXe/8FSKvNjUCYhpbwBEmhQ/NRWRfqBnvRS6Si1wP
 FN0IX6Z7106y3qPUktG2f+cCAwEAAQ==
 -----END PUBLIC KEY-----
 ```
+
 </details>
 
 Building from source is also possible; the original guide is at the end of this document.
@@ -74,7 +75,25 @@ Refer to [Alpine Wiki/AppArmor](https://wiki.alpinelinux.org/wiki/AppArmor) for 
 
 This is optional, but will enable more network-related features in Home Assistant.
 
-Refer to [`alpine-custom-setup`](https://github.com/kuba2k2/alpine-custom-setup/blob/master/alpine.md#networkmanager).
+1. Run the following commands:
+
+```bash
+apk add eudev networkmanager networkmanager-cli networkmanager-tui
+# install Wi-Fi support
+apk add networkmanager-wifi
+apk add wpa_supplicant
+# configure udev
+setup-devd udev
+rc-update -a del networking
+rc-update -a del wpa_supplicant
+rc-update add networkmanager boot
+# start NetworkManager
+service networkmanager start
+```
+
+2. Edit `/etc/network/interfaces` and remove all interfaces except `lo`.
+3. Check state of network interfaces with `nmcli dev`. If Wi-Fi is `unmanaged`, you'll most likely need to reboot.
+4. Run `nmtui` to configure your network connections. If you're not able to activate any connections, reboot.
 
 ### logind
 

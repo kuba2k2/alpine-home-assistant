@@ -1,6 +1,12 @@
 name: Manual dispatch
 on:
   workflow_dispatch:
+    inputs:
+      alpine-branch:
+        required: true
+        type: string
+        default: latest-stable
+        description: Alpine Linux branch (vX.YY)
 jobs:
   version:
     name: Get version numbers
@@ -23,6 +29,7 @@ jobs:
       ABUILD_PUBKEY: ${{ secrets.ABUILD_PUBKEY }}
     with:
       arch: ${{ matrix.arch }}
+      branch: ${{ inputs.alpine-branch }}
       build: |
         cd hassio-os-agent/
         abuild -r
@@ -42,5 +49,4 @@ jobs:
     permissions:
       contents: write
     with:
-      artifact: ${{ needs.abuild.outputs.artifact }}
       name: v${{ needs.version.outputs.git-long }}

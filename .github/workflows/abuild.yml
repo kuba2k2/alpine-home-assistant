@@ -30,6 +30,7 @@ jobs:
     with:
       arch: ${{ matrix.arch }}
       branch: ${{ inputs.alpine-branch }}
+      output-artifact: abuild-${{ inputs.alpine-branch }}-${{ matrix.arch }}
       build: |
         cd hassio-os-agent/
         abuild -r

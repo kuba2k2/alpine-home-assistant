@@ -2,33 +2,48 @@
 
 This guide, along with a few small software packages, allows to install Home Assistant Supervised on a host machine running Alpine Linux. Note that this is not a supported HA installation method, so YMMV. Personally, it works just fine on my ARMv7 machine.
 
-Since July 2023, there are prebuilt APK packages available in this repo (for `x86`, `x86_64`, `armhf`, `armv7` and `aarch64`). The README below has been updated to reflect that. They are signed with the following public key:
+> [!NOTE]
+> Since July 2023, there are prebuilt APK packages available in this repo (for `x86`, `x86_64`, `armhf`, `armv7` and `aarch64`). The README below has been updated to reflect that. They are signed with the following public key:
+>
+> <details>
+>
+> <summary>Click to show public key</summary>
+>
+> ```
+> -----BEGIN PUBLIC KEY-----
+> MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvrueY+eFZkILqfOsb8T8
+> oxJ1tfM57VtIPJnGZeuEJchyd6AHbG7CCErdtLMRI7eWXJlAU23erFj6Wp/2zC5x
+> XgfuE5ekMmq/8WwkvLYl9i9I/tgiFWklHkLAOsY8LkwtuQDeDEt3gMPFheY3uNaN
+> FMWXKYWmknsQM10IV28TgDPfMLbVh7LagFbsKLWang50N+eGiMwQi+N1fZ/rrpk/
+> Rco5opHpTOC1i+GTXCcVkuOisTFw741p7fFhWksgN7XZBwDXE472KLWV/he6mAqA
+> /PbWmZHQxCdL1NwYJS5v9+K/c2sRUGb0dcHjC0bf9etrEg4otY7iydwZnM180mpt
+> oMRxSLb63OFcfsNtJRu8+Wy/oZ28HzQeEqF9d7Z6o3OrXntoAqRneFNet/GMap5U
+> 1fjDEh79X0sjcZuASTV8hb4VvXR9s8Drw/POnpYdX1wLDSRm+N4Z0CoJDP0+CxVr
+> y11wSJmgyqkrZRfNyyQBW6H+zL+Pu5F15nq75fUlhE0eoBTi38THGgoGQSikBsHG
+> UXNr4nUIenfq0fzEYSlPYG3kXe/8FSKvNjUCYhpbwBEmhQ/NRWRfqBnvRS6Si1wP
+> +glz4VsR26fyMr2uH4SPL5c//GIgdCBZgfYusQsZjnJZkWDD8C61ijxBt+7cA0Sg
+> FN0IX6Z7106y3qPUktG2f+cCAwEAAQ==
+> -----END PUBLIC KEY-----
+> ```
+>
+> </details>
+>
+> Building from source is also possible; the original guide is at the end of this document.
 
-<details>
-<summary>Click to show public key</summary>
+> [!NOTE]
+> Since April 2024 the `MACHINE` variable in `/etc/hassio.json` created by this package is changed to reflect the correct system architecture. Upgrading to `hassio-supervised` v1.7.0 or newer will automatically rewrite that file with every update.
 
-```
------BEGIN PUBLIC KEY-----
-MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAvrueY+eFZkILqfOsb8T8
-oxJ1tfM57VtIPJnGZeuEJchyd6AHbG7CCErdtLMRI7eWXJlAU23erFj6Wp/2zC5x
-XgfuE5ekMmq/8WwkvLYl9i9I/tgiFWklHkLAOsY8LkwtuQDeDEt3gMPFheY3uNaN
-FMWXKYWmknsQM10IV28TgDPfMLbVh7LagFbsKLWang50N+eGiMwQi+N1fZ/rrpk/
-Rco5opHpTOC1i+GTXCcVkuOisTFw741p7fFhWksgN7XZBwDXE472KLWV/he6mAqA
-/PbWmZHQxCdL1NwYJS5v9+K/c2sRUGb0dcHjC0bf9etrEg4otY7iydwZnM180mpt
-oMRxSLb63OFcfsNtJRu8+Wy/oZ28HzQeEqF9d7Z6o3OrXntoAqRneFNet/GMap5U
-1fjDEh79X0sjcZuASTV8hb4VvXR9s8Drw/POnpYdX1wLDSRm+N4Z0CoJDP0+CxVr
-y11wSJmgyqkrZRfNyyQBW6H+zL+Pu5F15nq75fUlhE0eoBTi38THGgoGQSikBsHG
-UXNr4nUIenfq0fzEYSlPYG3kXe/8FSKvNjUCYhpbwBEmhQ/NRWRfqBnvRS6Si1wP
-+glz4VsR26fyMr2uH4SPL5c//GIgdCBZgfYusQsZjnJZkWDD8C61ijxBt+7cA0Sg
-FN0IX6Z7106y3qPUktG2f+cCAwEAAQ==
------END PUBLIC KEY-----
-```
+> [!NOTE]
+> Since September 2025 the APK packages are published in a subdirectory matching the branch of Alpine Linux used to build it. Run the following commands to replace the old entry in `/etc/apk/repositories`:
+>
+> ```bash
+> sudo sed -i '/kuba2k2.github.io\/alpine-home-assistant/d' /etc/apk/repositories
+> RELEASE=$(cat /etc/alpine-release)
+> echo "https://kuba2k2.github.io/alpine-home-assistant/v${RELEASE%.*}" | sudo tee -a /etc/apk/repositories
+> cat /etc/apk/repositories
+> ```
 
-</details>
-
-Building from source is also possible; the original guide is at the end of this document.
-
-**Note:** in April 2024 the `MACHINE` variable in `/etc/hassio.json` created by this package was changed to reflect the correct system architecture. Upgrading to `hassio-supervised` v1.7.0 or newer will automatically rewrite that file with every update.
+---
 
 ## Prerequisites
 
@@ -36,13 +51,16 @@ All steps of this guide (unless otherwise noted) are to be ran by a **non-root, 
 
 ### Bind propagation
 
-**Important:** since v1.4.3, the Home Assistant Supervisor needs **bind propagation** support in the root filesystem (see [home-assistant/supervised-installer#293](https://github.com/home-assistant/supervised-installer/pull/293)).
-
-The `rshared` flag has to be enabled in `/etc/fstab`:
-
-```
-UUID=the-uuid-is-usually-here       /       ext4    rw,relatime,rshared 0 1
-```
+> [!IMPORTANT]
+> Since v1.4.3, the Home Assistant Supervisor needs **bind propagation** support in the root filesystem (see [home-assistant/supervised-installer#293](https://github.com/home-assistant/supervised-installer/pull/293)).
+>
+> The `rshared` flag has to be enabled in `/etc/fstab`:
+>
+> ```
+> UUID=the-uuid-is-usually-here       /       ext4    rw,relatime,rshared 0 1
+> ```
+>
+> Remember to reboot after applying the changes (or, alternatively, run `sudo mount -o rshared,remount /`).
 
 ### Docker
 
@@ -73,7 +91,7 @@ Refer to [Alpine Wiki/AppArmor](https://wiki.alpinelinux.org/wiki/AppArmor) for 
 
 ### NetworkManager
 
-This is optional, but will enable more network-related features in Home Assistant.
+This is theoretically optional, but highly recommended, and will enable more network-related features in Home Assistant.
 
 1. Run the following commands:
 
@@ -95,6 +113,9 @@ service networkmanager start
 3. Check state of network interfaces with `nmcli dev`. If Wi-Fi is `unmanaged`, you'll most likely need to reboot.
 4. Run `nmtui` to configure your network connections. If you're not able to activate any connections, reboot.
 
+> [!NOTE]
+> If Home Assistant shows a network DNS error during first setup, make sure the DNS server displayed is correct and just let it do its work. It should be still downloading in the background, and the error should go away after the installation finishes.
+
 ### logind
 
 Optional, but (probably) enables more functionalities in HA, as the supervisor uses logind's DBus.
@@ -103,12 +124,15 @@ Optional, but (probably) enables more functionalities in HA, as the supervisor u
 sudo apk add elogind
 ```
 
+---
+
 ## Installing prebuilt packages
 
 Enable the APK repository from this GitHub repo:
 
 ```bash
-echo "https://kuba2k2.github.io/alpine-home-assistant" | sudo tee -a /etc/apk/repositories
+RELEASE=$(cat /etc/alpine-release)
+echo "https://kuba2k2.github.io/alpine-home-assistant/v${RELEASE%.*}" | sudo tee -a /etc/apk/repositories
 # install the public key
 sudo wget -O /etc/apk/keys/actions@kuba2k2.github.io-64b57843.rsa.pub https://raw.githubusercontent.com/kuba2k2/alpine-home-assistant/master/actions@kuba2k2.github.io-64b57843.rsa.pub
 # update repos
@@ -138,6 +162,8 @@ See Docker containers starting up:
 ```bash
 watch -n 3 docker ps
 ```
+
+---
 
 ## Building from source
 
